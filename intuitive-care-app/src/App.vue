@@ -17,14 +17,30 @@
       <table class="table table-hover">
         <thead>
           <tr>
-            <th>Nome</th>
-            <th>Email</th>
+            <th v-for="(titulo, index) in titulos" :key="index">{{ titulo }}</th>            
           </tr>
         </thead>
-        <tbody v-for="person in people" :key="person.email">
+        <tbody v-for="(dado, index) in dados" :key="index">
           <tr>
-            <td>{{ person.name }}</td>
-            <td>{{ person.email }}</td>
+            <td>{{ dado[chaves[0]] }}</td>
+            <td>{{ dado[chaves[1]] }}</td>
+            <td>{{ dado[chaves[2]] }}</td>
+            <td>{{ dado[chaves[3]] }}</td>
+            <td>{{ dado[chaves[4]] }}</td>
+            <td>{{ dado[chaves[5]] }}</td>
+            <td>{{ dado[chaves[6]] }}</td>
+            <td>{{ dado[chaves[7]] }}</td>
+            <td>{{ dado[chaves[8]] }}</td>
+            <td>{{ dado[chaves[9]] }}</td>
+            <td>{{ dado[chaves[10]] }}</td>
+            <td>{{ dado[chaves[11]] }}</td>
+            <td>{{ dado[chaves[12]] }}</td>
+            <td>{{ dado[chaves[13]] }}</td>
+            <td>{{ dado[chaves[14]] }}</td>
+            <td>{{ dado[chaves[15]] }}</td>
+            <td>{{ dado[chaves[16]] }}</td>
+            <td>{{ dado[chaves[17]] }}</td>
+            <td>{{ dado[chaves[18]] }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,38 +50,66 @@
 </template>
 
 <script>
+
   import './assets/bootstrap.min.css'
   import api from '@/services/api.js'
 
-  const people = [
-    {
-      name: 'Calvin Hawkins',
-      email: 'calvin.hawkins@example.com',
-    },
-    {
-      name: 'Kristen Ramos',
-      email: 'kristen.ramos@example.com',
-    },
-    {
-      name: 'Ted Fox',
-      email: 'ted.fox@example.com',
-    },
-    {
-      name: 'Gésio de Moura',
-      email: 'iajm@gmail.com',
-    },
-  ]
+  const titulos = [ 
+    "Registro ANS",
+    "CNPJ",
+    "Razão Social",
+    "Nome Fantasia",
+    "Modalidade",
+    "Logradouro",
+    "Número",
+    "Complemento",
+    "Bairro",
+    "Cidade",
+    "UF",
+    "CEP",
+    "DDD",
+    "Telefone",
+    "Fax",
+    "Endereço eletrônico",
+    "Representante",
+    "Cargo Representante",
+    "Data Registro ANS"
+    ]
+
+  const chaves = [ 
+    "RegistroANS",
+    "CNPJ",
+    "RazaoSocial",
+    "NomeFantasia",
+    "Modalidade",
+    "Logradouro",
+    "Numero",
+    "Complemento",
+    "Bairro",
+    "Cidade",
+    "UF",
+    "CEP",
+    "DDD",
+    "Telefone",
+    "Fax",
+    "Enderecoeletronico",
+    "Representante",
+    "CargoRepresentante",
+    "DataRegistroANS"
+    ]
 
   export default {
-    mounted(){
-      api.get('/').then(response => {
-        console.log(response)
-      })
-    },
     data() {
       return {
-        people,
+        dados: [],
+        titulos,
+        chaves,
       }
+    },
+    mounted(){
+      api.get('/').then(response => {
+        this.dados = response.data
+      })
     },
   }
 </script>
@@ -85,15 +129,17 @@
 
   .main{
     background-color: white;
-    height: fit-content;
+    height: 85vh;
     padding: 12px;
     margin: 24px;
     border-radius: 4px;
+    overflow-x: auto;
   }
+
 
   .area{
     background-color: #F1F1F1;
-    height: 100vh;
+    height: 100%;
   }
 
   .title{

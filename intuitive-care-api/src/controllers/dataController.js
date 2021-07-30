@@ -7,7 +7,7 @@ module.exports = {
 
             const results = [];
             fs.createReadStream(`${__dirname}/teste.csv`)
-                .setEncoding('utf8')
+                .setEncoding('latin1')
                 .pipe(csv())
                 .on('data', (data) => results.push(data))
                 .on('end', () => {
@@ -15,15 +15,34 @@ module.exports = {
                     results.map(result=>{
                         if (Object.keys(result).length != 0){
                             let text = result[Object.keys(result)[0]]
-                            textTranform.push(text.split("\";\""))
+                            textTranform.push(text.split('\";\"'))
                         }
                     })
-                    console.log(`${textTranform[0][0]}:${textTranform[1][0]}`);
-                    console.log(`${textTranform[0][1]}:${textTranform[1][1]}`);
-                    console.log(`${textTranform[0][2]}:${textTranform[1][2]}`);
-                    console.log(`${textTranform[0][3]}:${textTranform[1][3]}`);
-                    console.log(`${textTranform[0][4]}:${textTranform[1][4]}`);
-                    res.status(200).send(textTranform)
+                    let result =[]
+                    for(let i=1; i<=1170; i++){
+                        let objInfo = {}
+                        for(let j=0; j <= 18; j++){
+                            let texto = textTranform[0][j]
+                              .replace(" ", "")
+                              .replace("ã", "a")
+                              .replace("ú", "u")
+                              .replace("ç", "c")
+                              .replace("ô", "o")
+                              .replace(" ", "");
+                                if (
+                                  textTranform[i][j] == undefined ||
+                                  textTranform[i][j] == null ||
+                                  textTranform[i][j].length == 0 ||
+                                  textTranform[i][j]== false
+                                ) {
+                                  textTranform[i][j] = "";
+                                }
+                                  objInfo[texto] = textTranform[i][j];
+                        }
+                        result.push(objInfo);
+                    }
+
+                    res.status(200).send(result)
             });
         }catch(msg){
             res.status(400).send(msg)
