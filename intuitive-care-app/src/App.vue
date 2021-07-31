@@ -7,12 +7,14 @@
       <aside class="main-top">
         <h1 class="title">Relação de Operadoras Ativas ANS</h1>
         <div class="input-group mb-2 search">
-          <input type="text" class="form-control" placeholder="Faça uma pesquisa" aria-label="Small">
+          <input type="text" class="form-control" v-model="texto" v-on:change="pesquisa(texto, dados)" placeholder="Faça uma pesquisa" aria-label="Small">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button">Pesquisar</button>
+            <button class="btn btn-outline-secondary" type="button" v-on:change="pesquisa(texto, dados)">Pesquisar</button>
           </div>
         </div>
-      </aside>
+      </aside>      
+
+      <p>Deve ser buscado na tabela: {{ resultado }}</p>
 
       <table class="table table-hover">
         <thead>
@@ -104,6 +106,8 @@
         dados: [],
         titulos,
         chaves,
+        texto: '',
+        resultado:'',
       }
     },
     mounted(){
@@ -111,6 +115,11 @@
         this.dados = response.data
       })
     },
+    methods: {
+      pesquisa(param) {
+        this.resultado = param
+      }
+    }
   }
 </script>
 
