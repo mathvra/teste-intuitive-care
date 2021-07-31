@@ -7,14 +7,12 @@
       <aside class="main-top">
         <h1 class="title">Relação de Operadoras Ativas ANS</h1>
         <div class="input-group mb-2 search">
-          <input type="text" class="form-control" v-model="texto" v-on:change="pesquisa(texto, dados)" placeholder="Faça uma pesquisa" aria-label="Small">
+          <input type="text" class="form-control" v-model="texto" placeholder="Faça uma pesquisa" aria-label="Small">
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" v-on:change="pesquisa(texto, dados)">Pesquisar</button>
+            <button class="btn btn-outline-secondary" type="button" v-on:click="pesquisa(texto)">Pesquisar</button>
           </div>
         </div>
       </aside>      
-
-      <p>Deve ser buscado na tabela: {{ resultado }}</p>
 
       <table class="table table-hover">
         <thead>
@@ -22,7 +20,7 @@
             <th v-for="(titulo, index) in titulos" :key="index">{{ titulo }}</th>            
           </tr>
         </thead>
-        <tbody v-for="(dado, index) in dados" :key="index">
+        <tbody v-for="(dado, index) in resultado" :key="index">
           <tr>
             <td>{{ dado[chaves[0]] }}</td>
             <td>{{ dado[chaves[1]] }}</td>
@@ -104,20 +102,34 @@
     data() {
       return {
         dados: [],
+        dadosPesquisa: [],
         titulos,
         chaves,
         texto: '',
-        resultado:'',
+        resultado: [],
       }
     },
     mounted(){
       api.get('/').then(response => {
         this.dados = response.data
+        this.resultado = this.dados
       })
     },
     methods: {
-      pesquisa(param) {
-        this.resultado = param
+      pesquisa(text) {
+        console.log(text.length)
+        if (text.length != 0) {
+          this.dadosPesquisa = this.dados.filter(function (item) {
+          let itemData = item[chaves[2]]
+            ? item[chaves[2]].toUpperCase()
+            : ''.toUpperCase();
+          const textData = text.toUpperCase();
+          return itemData.indexOf(textData) > -1; 
+          });
+          this.resultado = this.dadosPesquisa
+        }else if(text.length == 0){
+          this.resultado = this.dados
+        }
       }
     }
   }
